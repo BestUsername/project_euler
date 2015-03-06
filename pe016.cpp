@@ -13,7 +13,7 @@ std::string get_reverse_buffer_string(const std::vector<T>& buffer) {
     return result.str();
 }
 
-size_t sum_power_digits(size_t exponent) {
+size_t sum_power_digits(size_t base, size_t exponent) {
     size_t result = 0;
     //No native data type large enough for 2^1000
     //Must use container. Might as well use vector
@@ -27,7 +27,7 @@ size_t sum_power_digits(size_t exponent) {
     for (size_t e = 1; e <= exponent; ++e) {
         for (size_t i = 0; i <= max_index; ++i) {
             digit = buffer[i];
-            x2 = digit * 2;
+            x2 = digit * base;
             
             sum_next /=10;
             buffer[i] = x2 % 10 + sum_next %10;
@@ -50,7 +50,7 @@ size_t sum_power_digits(size_t exponent) {
 int main(int argc, char ** argv) {
     int exit_code = EXIT_SUCCESS;
     int ans = 1366;
-    int result = sum_power_digits(1000);
+    int result = sum_power_digits(2, 1000);
     std::cout << "Answer should be " << ans << ":\t" << result << std::endl;
     return exit_code;
 }

@@ -33,7 +33,10 @@ T total_paths(T length, T width) {
     T shorter = std::min(length, width);
     T longer = std::max(length, width);
     //initialize and zero out the cache
-    T cache[shorter]={};
+    T cache[shorter];
+	 for (T i = 0;i<shorter;++i) {
+		 cache[i] = 0;
+	 }
     //the additional iteration is to set up the initial values of all 1;
     for (T i = 0; i <= longer; ++i) {
         cache[0] += 1;
@@ -46,7 +49,7 @@ T total_paths(T length, T width) {
 }
 
 int main(int argc, char** argv) {
-    typedef long type;
+    typedef long long type;
     int exit_code = EXIT_SUCCESS;
     type ans = 137846528820;
     type value = total_paths<type>(20,20);

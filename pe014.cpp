@@ -3,6 +3,7 @@
 #include <map>
 #include <new>
 
+#include "pe.h"
 
 /**
   Kinda works, but runs out of memory super fast
@@ -51,36 +52,40 @@ T leaner_collatz(std::map<T, T> & lengths, size_t value, T counter) {
     return ret_val;
 }
 
-int main(int argc, char ** argv) {
-    typedef int type;
-    
-    int exit_code = EXIT_SUCCESS;
-    type under = 1000000;
-    type ans = 837799;
-    type best_value =0;
-    type best_start = 0;
+class pe014 : public pe_base {
+    void run_test() {
+        typedef int type;
+        type under = 1000000;
+        type ans = 837799;
+        type best_value =0;
+        type best_start = 0;
 
-    std::map<type, type> collatz_lengths;
-    collatz_lengths[1] = 0;
-    collatz_lengths[2] = 1;
+        std::map<type, type> collatz_lengths;
+        collatz_lengths[1] = 0;
+        collatz_lengths[2] = 1;
 
-    try{
-        for (type i = 3; i < under; ++i) {
-            //int value = dumb_collatz(i, 0);
-            type value = leaner_collatz(collatz_lengths, i, 0);
-            if (value > best_value) {
-                best_value = value;
-                best_start = i;
-                std::cout << "New longest found: [" << best_start << ", " << best_value << "]" << std::endl;
+        try{
+            for (type i = 3; i < under; ++i) {
+                //int value = dumb_collatz(i, 0);
+                type value = leaner_collatz(collatz_lengths, i, 0);
+                if (value > best_value) {
+                    best_value = value;
+                    best_start = i;
+                    //std::cout << "New longest found: [" << best_start << ", " << best_value << "]" << std::endl;
+                }
             }
+        } catch (std::bad_alloc &b) {
+            std::cerr << "Bad_alloc caught: " << b.what() << "\nQuitting Early" << std::endl;
         }
-    } catch (std::bad_alloc &b) {
-        std::cerr << "Bad_alloc caught: " << b.what() << "\nQuitting Early" << std::endl;
+        
+        check("014", ans, best_start);
     }
-    
+};
 
-
-    std::cout << "The answer should be " << ans << ": [" << best_start << ", " << best_value << "]" << std::endl;
-    return exit_code;
+int main(int argc, char** argv) {
+    pe014 test;
+    test.go();
+    std::cout << test.get_message() << std::endl; 
+    return test.exit_code();
 }
 

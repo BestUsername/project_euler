@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstdlib>
 
+#include "pe.h"
+
 /*
 In the 20×20 grid below, four numbers along a diagonal line have been marked in red.
 
@@ -88,14 +90,18 @@ int find_greatest_adjacent_product(int num) {
     return retval;
 }
 
-int main(int argc, char **argv) {
-    int retval = EXIT_SUCCESS;
-    int ans = 70600674;
-    int value = find_greatest_adjacent_product(4);
-    std::cout << "The answer should be " << ans << ": " << value << std::endl;
-    if (ans != value) {
-        retval = EXIT_FAILURE;
+class pe011 : public pe_base {
+    void run_test() {
+        int ans = 70600674;
+        int value = find_greatest_adjacent_product(4);
+        check("011", ans, value);
     }
-    return retval;
 };
+
+int main(int argc, char** argv) {
+    pe011 test;
+    test.go();
+    std::cout << test.get_message() << std::endl; 
+    return test.exit_code();
+}
 

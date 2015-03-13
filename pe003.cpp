@@ -1,6 +1,6 @@
-#include <cstdlib>
-#include <cmath>
 #include <iostream>
+#include <cmath>
+#include "pe.h"
 
 bool is_pal(int num) {
     bool retval = true;
@@ -37,15 +37,16 @@ int largest_pal_fac(int num_digits) {
    
 }
 
-int main(int argc, char **argv) {
-    int retval = EXIT_SUCCESS;
+class pe003 : public pe_base {
+    void run_test() {
+        check("003", 906609, largest_pal_fac(3));
+    }
+};
 
-    int fac = largest_pal_fac(3);
-    int ans = 906609;
-    retval = fac == ans;
-
-    std::cout << "Should be " << ans << ": " << fac << " - " << retval << std::endl;
-
-    return retval;
+int main(int argc, char** argv) {
+    pe003 test;
+    test.go();
+    std::cout << test.get_message() << std::endl; 
+    return test.exit_code();
 }
 

@@ -1,9 +1,10 @@
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <memory>  //shared_ptr
-#include <cstdlib> //exit codes
 #include <cmath>   //log
 
+#include "pe.h"
 
 unsigned char matrix[100][50] = {
     {3,7,1,0,7,2,8,7,5,3,3,9,0,2,1,0,2,7,9,8,7,9,7,9,9,8,2,2,0,8,3,7,5,9,0,2,4,6,5,1,0,1,3,5,7,4,0,2,5,0},
@@ -149,14 +150,25 @@ sum_large(const T (&m)[size_x][size_y]) {
     return result;
 }
 
-int main(int argc, char** argv) {
-    int retval = EXIT_SUCCESS;
-    std::shared_ptr<std::vector<unsigned char> > result = sum_large(matrix);
-    for (auto rit = result->crbegin(); rit != result->crend(); ++rit) {
-        std::cout << (int)*rit; 
+class pe013 : public pe_base {
+    void run_test() {
+        std::stringstream assemble;
+        std::shared_ptr<std::vector<unsigned char> > result = sum_large(matrix);
+        //only want first 10 digits
+        int countdown = 10;
+        for (auto rit = result->crbegin(); rit != result->crend() && countdown>0; ++rit) {
+            assemble << (int)*rit;
+            --countdown;
+        }
+        std::string ans("5537376230");
+        check("013", ans, assemble.str());
     }
-    std::string ans("5537376230");
-    std::cout << std::endl << "Answer: " << ans << std::endl;
-    return retval;
+};
+
+int main(int argc, char** argv) {
+    pe013 test;
+    test.go();
+    std::cout << test.get_message() << std::endl; 
+    return test.exit_code();
 }
 

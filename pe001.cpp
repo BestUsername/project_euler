@@ -1,5 +1,5 @@
-#include <cstdlib>
 #include <iostream>
+#include "pe.h"
 
 int sum_multi(int x1, int x2, int ceiling) {
     int sum = 0;
@@ -21,9 +21,16 @@ int sum_multi(int x1, int x2, int ceiling) {
     return sum;
 }
 
-int main(int argc, char ** argv) {
-    std::cout << "Answer should be 233168: " << sum_multi(3,5,1000) << std::endl;
+class pe001 : public pe_base {
+    void run_test() {
+        check("001", 233168, sum_multi(3,5,1000));
+    }
+};
 
-    return EXIT_SUCCESS;
+int main(int argc, char** argv) {
+    pe001 test;
+    test.go();
+    std::cout << test.get_message() << std::endl; 
+    return test.exit_code();
 }
 

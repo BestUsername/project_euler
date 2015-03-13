@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstdlib>
 
+#include "pe.h"
+
 /**
   Starting in the top left corner of a 2x2 grid, and only being able to move to the right and down,
   there are exactly 6 routes to the bottom right corner.
@@ -48,12 +50,19 @@ T total_paths(T length, T width) {
     return cache[shorter-1];
 }
 
+class pe015 : public pe_base {
+    void run_test() {
+        typedef long long type;
+        type ans = 137846528820;
+        type value = total_paths<type>(20,20);
+        check("015", ans, value);
+    }
+};
+
 int main(int argc, char** argv) {
-    typedef long long type;
-    int exit_code = EXIT_SUCCESS;
-    type ans = 137846528820;
-    type value = total_paths<type>(20,20);
-    std::cout << "The answer should be " << ans << ":\t" << value << std::endl;
-    return exit_code;
+    pe015 test;
+    test.go();
+    std::cout << test.get_message() << std::endl; 
+    return test.exit_code();
 }
 

@@ -1,5 +1,6 @@
-#include <cstdlib>
 #include <iostream>
+#include "pe.h"
+
 /*
 A Pythagorean triplet is a set of three natural numbers, a < b < c, for which,
 
@@ -31,14 +32,18 @@ int find_product_of_triplet(int sum) {
     return product;
 }
 
-int main(int argc, char **argv) {
-    int retval = EXIT_SUCCESS;
-    int ans = 31875000;
-    int result = find_product_of_triplet(1000);
-    std::cout << "Answer should be " << ans << ": " << result << std::endl;
-    if (result != ans) {
-        retval = EXIT_FAILURE;
+class pe009 : public pe_base {
+    void run_test() {
+        int ans = 31875000;
+        int result = find_product_of_triplet(1000);
+        check("009", ans, result);
     }
-    return retval;
+};
+
+int main(int argc, char** argv) {
+    pe009 test;
+    test.go();
+    std::cout << test.get_message() << std::endl; 
+    return test.exit_code();
 }
 

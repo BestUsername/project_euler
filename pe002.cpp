@@ -1,5 +1,5 @@
-#include <cstdlib>
 #include <iostream>
+#include "pe.h"
 
 template<typename ret>
 ret sum_pos_fib(ret cap) {
@@ -16,8 +16,16 @@ ret sum_pos_fib(ret cap) {
     return sum;
 }
 
-int main(int argc, char **argv) {
-    std::cout << "Should be 4613732: " << sum_pos_fib<int>(4000000) << std::endl;
-    return EXIT_SUCCESS;
+class pe002 : public pe_base {
+    void run_test() {
+        check("002", 4613732, sum_pos_fib<int>(4000000));
+    }
+};
+
+int main(int argc, char** argv) {
+    pe002 test;
+    test.go();
+    std::cout << test.get_message() << std::endl; 
+    return test.exit_code();
 }
 

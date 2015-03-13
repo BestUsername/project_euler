@@ -1,9 +1,11 @@
+#include <iostream>
 #include <cmath>
 #include <map>
 #include <vector>
 #include <memory>
-#include <iostream>
-#include <cstdlib>
+
+#include "pe.h"
+
 /*
    2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
 
@@ -50,11 +52,19 @@ int get_lowest_common_product( const std::vector<int> &values ) {
     return lcp;
 }
 
-int main(int argc, char **argv) {
-    std::vector<int> values {2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-    int ans = 232792560;
-    int result = get_lowest_common_product(values);
-    std::cout << "Answer should be " << ans << ": " << result << " - result(" << (result == ans) << ")" << std::endl;
-    return EXIT_SUCCESS;
+class pe005 : public pe_base {
+    void run_test() {
+        std::vector<int> values {2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+        int ans = 232792560;
+        int result = get_lowest_common_product(values);
+        check("005", ans, result);
+    }
+};
+
+int main(int argc, char** argv) {
+    pe005 test;
+    test.go();
+    std::cout << test.get_message() << std::endl; 
+    return test.exit_code();
 }
 

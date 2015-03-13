@@ -1,8 +1,10 @@
-#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <memory>
 #include <cmath>
+
+#include "pe.h"
+
 /*
 A palindromic number reads the same both ways. The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 × 99.
 
@@ -51,12 +53,18 @@ largest_palindrome_brute(int num_digits) {
     return retval;
 }
 
-int main(int argc, char **argv) {
-    int retval = EXIT_SUCCESS;
-    int ans = 906609;
-    std::shared_ptr<std::pair<int, int> > solve = largest_palindrome_brute(3);
-    int value = solve->first * solve->second;
-    std::cout << "Answer should be " << ans << ": " << value << std::endl;
-    return retval;
+class pe004 : public pe_base {
+    void run_test() {
+        std::shared_ptr<std::pair<int, int> > solve = largest_palindrome_brute(3);
+        int value = solve->first * solve->second;
+        check("pe004", 906609, value);
+    }
+};
+
+int main(int argc, char** argv) {
+    pe004 test;
+    test.go();
+    std::cout << test.get_message() << std::endl; 
+    return test.exit_code();
 }
 

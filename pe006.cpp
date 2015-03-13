@@ -1,7 +1,9 @@
-#include <cstdlib>
+#include <iostream>
 #include <cmath>
 #include <memory>
-#include <iostream>
+
+#include "pe.h"
+
 /*
 The sum of the squares of the first ten natural numbers is,
 
@@ -38,15 +40,20 @@ find_sums_brute(int start, int end) {
     return retval;
 }
 
-int main(int argc, char **argv) {
-    int retval = EXIT_SUCCESS;
-    int start = 1;
-    int end = 100;
-    std::shared_ptr<std::pair<int, int> > result = find_sums_brute(start, end);
-    int ans = 25164150;
-    int value = std::abs(result->first - result->second);
-    int value2 = sped_up(100);
-    std::cout << "Answer should be: " << ans << " - " << value << " - " << value2 << std::endl;
-    return retval;
+class pe006 : public pe_base {
+    void run_test() {
+        //std::shared_ptr<std::pair<int, int> > result = find_sums_brute(1, 100);
+        //int value = std::abs(result->first - result->second);
+        int ans = 25164150;
+        int value = sped_up(100);
+        check("006", ans, value);
+    }
+};
+
+int main(int argc, char** argv) {
+    pe006 test;
+    test.go();
+    std::cout << test.get_message() << std::endl; 
+    return test.exit_code();
 }
 

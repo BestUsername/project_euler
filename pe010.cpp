@@ -1,7 +1,9 @@
-#include <cstdlib>
+#include <iostream>
 #include <memory>
 #include <vector>
-#include <iostream>
+
+#include "pe.h"
+
 /*
 The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
 
@@ -65,14 +67,17 @@ type get_primes_sum_under_slow(int n) {
     return sum;
 }
 
-int main(int argc, char **argv) {
-    int retval = EXIT_SUCCESS;
-    type ans = 142913828922;
-    type value = get_primes_sum_under_faster(2000000);
-    std::cout << "The answer should be " << ans << ": " << value << std::endl;
-    if (ans != value) {
-        retval = EXIT_FAILURE;
+class pe010 : public pe_base {
+    void run_test() {
+        type ans = 142913828922;
+        type value = get_primes_sum_under_faster(2000000);
+        check("010", ans, value);
     }
-    return retval;
-}
+};
 
+int main(int argc, char** argv) {
+    pe010 test;
+    test.go();
+    std::cout << test.get_message() << std::endl; 
+    return test.exit_code();
+}

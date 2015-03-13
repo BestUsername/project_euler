@@ -1,8 +1,8 @@
 #include <iostream>
-#include <cstdlib>
 #include <vector>
 #include <memory>
-#include <iostream>
+
+#include "pe.h"
 
 /*
 By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.
@@ -43,16 +43,20 @@ get_nth_prime(int n) {
     return retval;
 }
 
-int main(int argc, char **argv) {
-    int ans = 104743;
-    
-    std::shared_ptr<std::vector<int> > primes = get_nth_prime(10001);
-    
-    //for this purpose we're only interested in the last prime
-    int returned = primes->back();
+class pe007 : public pe_base {
+    void run_test() {
+        int ans = 104743;
+        std::shared_ptr<std::vector<int> > primes = get_nth_prime(10001);
+        //for this purpose we're only interested in the last prime
+        int value = primes->back();
+        check("007", ans, value);
+    }
+};
 
-    std::cout << "Answer should be " << ans << ": " << returned << std::endl;
-
-    return (ans == returned) ? EXIT_SUCCESS : EXIT_FAILURE;
+int main(int argc, char** argv) {
+    pe007 test;
+    test.go();
+    std::cout << test.get_message() << std::endl; 
+    return test.exit_code();
 }
 

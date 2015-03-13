@@ -1,8 +1,9 @@
 #include<iostream>
-#include <cstdlib>
 #include <vector>
 #include <cmath>
 #include <sstream>
+
+#include "pe.h"
 
 template<typename T>
 std::string get_reverse_buffer_string(const std::vector<T>& buffer) {
@@ -47,11 +48,18 @@ size_t sum_power_digits(size_t base, size_t exponent) {
     return result;
 }
 
-int main(int argc, char ** argv) {
-    int exit_code = EXIT_SUCCESS;
-    int ans = 1366;
-    int result = sum_power_digits(2, 1000);
-    std::cout << "Answer should be " << ans << ":\t" << result << std::endl;
-    return exit_code;
+class pe016 : public pe_base {
+    void run_test() {
+        int ans = 1366;
+        int value = sum_power_digits(2, 1000);
+        check("016", ans, value);
+    }
+};
+
+int main(int argc, char** argv) {
+    pe016 test;
+    test.go();
+    std::cout << test.get_message() << std::endl; 
+    return test.exit_code();
 }
 

@@ -1,7 +1,9 @@
-#include <cstdlib>
+#include <iostream>
 #include <cmath>
 #include <string>
-#include <iostream>
+
+#include "pe.h"
+
 /*
 The four adjacent digits in the 1000-digit number that have the greatest product are 9 × 9 × 8 × 9 = 5832.
 
@@ -50,14 +52,18 @@ type find_greatest_product(int num_digits) {
     return result;
 }
 
-int main(int argc, char **argv) {
-	int retval = EXIT_SUCCESS;
-	type ans = 23514624000;
-   type result = find_greatest_product(13);
-   std::cout << "Answer should be " << ans << ": " << result << std::endl;
-   if (ans != result) {
-   	retval = EXIT_FAILURE;
-   }
-   return retval;
+class pe008 : public pe_base {
+    void run_test() {
+        type ans = 23514624000;
+        type result = find_greatest_product(13);
+        check("008", ans, result);
+    }
+};
+
+int main(int argc, char** argv) {
+    pe008 test;
+    test.go();
+    std::cout << test.get_message() << std::endl; 
+    return test.exit_code();
 }
 

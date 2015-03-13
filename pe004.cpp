@@ -57,7 +57,7 @@ class pe004 : public pe_base {
     void run_test() {
         std::shared_ptr<std::pair<int, int> > solve = largest_palindrome_brute(3);
         int value = solve->first * solve->second;
-        check("pe004", 906609, value);
+        check("004", 906609, value);
     }
 };
 

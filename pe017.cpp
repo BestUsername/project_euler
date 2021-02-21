@@ -6,11 +6,12 @@
 #include "pe.h"
 
 /**
- * Takes in a positive integer (1 <= number < 1000) and returns the string
- * as well as the count of letters. 
+ * Takes in a positive integer (1 <= number < 1000) and returns the human string
+ * as well as the count of letters.
  * Example: 128 would return <24, "one hundred and twenty eight">
 **/
-std::tuple<size_t, std::string> char_count_and_string_e2(int number) {
+template<typename T>
+std::tuple<size_t, std::string> char_count_and_string_e2(T number) {
     if (number < 0 || number >1000) {
         std::cerr << "ERROR: " << number << std::endl;
         throw std::invalid_argument("Input must be between 0 and 999 inclusive");
@@ -31,31 +32,34 @@ std::tuple<size_t, std::string> char_count_and_string_e2(int number) {
     size_t count = 0;
     std::stringstream stream;
 
-    int remainder = number;
-    int temp;
+    T remainder = number;
+    T temp;
 
     if (remainder >= 100) {
-        temp = int(remainder/100);
+        temp = T(remainder/100);
         remainder = remainder % 100;
 
         count += u20[temp-1].length() + hundred.length();
-        stream << u20[temp-1] << " " << hundred << " ";
+        stream << u20[temp-1] << " " << hundred;
         
-        if (remainder > 0) {
+        if (remainder >= 1) {
             count += and_string.length();
-            stream << and_string << " ";
+            stream << " " << and_string << " ";
         }
     }
 
     while (remainder >= 1) {
         if (remainder >=20 && remainder < 100) {
-            temp = int(remainder/10);
+            temp = T(remainder/10);
             remainder = remainder % 10;
 
             count += tens[temp-2].length();
-            stream << tens[temp-2] << " ";
+            stream << tens[temp-2];
+            // only add a space if we need to finish the number
+            if (remainder >= 1) {
+                stream << " ";
+            }
         } else if (remainder >= 1 && remainder < 20) {
-            
             count += u20[remainder-1].length();
             stream << u20[remainder-1];
             remainder = 0;
@@ -64,60 +68,81 @@ std::tuple<size_t, std::string> char_count_and_string_e2(int number) {
     return std::make_tuple(count, stream.str());
 }
 
-
-std::tuple<size_t, std::string> char_count_and_string_e3(int number) {
-    std::string thousand = "thousand";
-    
+/**
+ * Takes in a positive integer (1 <= number < 1*10^63) and returns the human string
+ * as well as the count of letters.
+ * Example: 128 would return <24, "one hundred and twenty eight">
+ * Example: 100003450000 would return <56, "one hundred billion three million four hundred and fifty thousand">
+**/
+template<typename T>
+std::tuple<size_t, std::string> char_count_and_string_ex3(T number) {
+    // These are all of the groupings in increments of 10^3 in wikipedia
+    std::string e3s[21] = {
+            "thousand", "million", "billion", "trillion", "quadrillion", "quintillion", "sextillion", "septillion",
+            "octillion", "nonillion", "decillion", "undecillion", "duodecillion", "tredecillion", "quattuordecillion",
+            "quindecillion", "sexdecillion", "septendecillion", "octodecillion", "novemdecillion", "vigintillion"};
     size_t count = 0;
     std::stringstream stream;
 
+    double logval;
+    T section, section_scalar, section_value;
 
-    if (number < 1 || number >= 1e6) {
-        throw std::invalid_argument("Input must be between 1 and 999,999 inclusive");
-    }
+    while (number >= 1) {
+        // isolate the most significant "section" (named triplet group)
+        logval = log10(number);
+        section = floor(logval/3);
+        section_scalar = pow(10, section*3);
+        section_value = number / section_scalar;
+        std::tuple<size_t, std::string> section_tuple = char_count_and_string_e2<T>(section_value);
 
-    int temp;
+        count += std::get<0>(section_tuple);
+        stream << " " << std::get<1>(section_tuple);
+        number -= (section_value * section_scalar);
 
-    if (number >= 1000) {
-        temp = int(number/1000);
-        number -= (temp*1000);
-
-        std::tuple<size_t, std::string> thousands = char_count_and_string_e2(temp);
-        count += std::get<0>(thousands) + thousand.length();
-        stream << std::get<1>(thousands) << " " << thousand;
-        if (number > 0) {
-            stream << " ";
+        if (section >=1) {
+            count += e3s[section-1].length();
+            stream << " " << e3s[section-1];
         }
-    }
-    if (number >= 1) {
-        std::tuple<size_t, std::string> hundreds = char_count_and_string_e2(number);
-        count += std::get<0>(hundreds);
-        stream << std::get<1>(hundreds);
     }
     return std::make_tuple(count, stream.str());
 }
 
+/**
+ * Specifically for pe017: loop from 1 through [number] and sum the character count for all human-written words.
+ */
 size_t get_looped_letter_count(int number) {
     size_t counter = 0;
     std::tuple<size_t, std::string> count_and_string;
     for (int i = 1; i <= number; ++i) {
-        count_and_string = char_count_and_string_e3(i);
+        count_and_string = char_count_and_string_ex3<int>(i);
         counter += std::get<0>(count_and_string);
-        // std::cout << i << ":\t" << std::get<0>(count_and_string) << "\t" << counter << "\t" << std::get<1>(count_and_string) << std::endl;
+        //std::cout << i << ":\t" << std::get<0>(count_and_string) << "\t" << counter << "\t" << std::get<1>(count_and_string) << std::endl;
     }
     return counter;
+}
+
+/**
+ * Simple util function to print out a number, it's english form, and the character count.
+ */
+template<typename T>
+void printout(T number) {
+    std::tuple<size_t, std::string> result = char_count_and_string_ex3<T>(number);
+    std::cout << number << "\t" << std::get<0>(result) << "\t" << std::get<1>(result) << std::endl;
 }
 
 class pe017 : public pe_base {
     void run_test() {
         //check("017", 19, int(get_looped_letter_count(5)));
         check("017", 21124, int(get_looped_letter_count(1000)));
-        //check("017", 56, int(std::get<0>(get_letter_count_of_number(999999))));
-        //check("017", 37, int(std::get<0>(get_letter_count_of_number(9324))));
     }
 };
 
 int main(int argc, char** argv) {
+    /*
+    printout<long long>(100003450000LL);
+    printout<long long>(123456789123LL);
+    */
+
     pe017 test;
     test.go();
     std::cout << test.get_message() << std::endl; 

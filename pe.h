@@ -32,6 +32,7 @@ class pe_base {
             } else {
                 m_message << "PASS";
             }
+            m_message << std::endl;
         };
 
     private:
